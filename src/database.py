@@ -29,6 +29,17 @@ class Database:
         else:
             return False
 
+    def info_bylogin(self, table_name, user):
+        self.cursor.execute(f'SELECT * FROM {table_name} WHERE login=?', [user.lower()])
+        user = self.cursor.fetchone()
+        if user is None:
+            return False
+        else:
+            return user
+    def change_value(self, table_name, key, value, id):
+        self.cursor.execute(f'UPDATE {table_name} SET {key}=? WHERE id=?', [value, id])
+        self.connection.commit()
+
     def get_user(self, table_name, user, passwd):
         self.cursor.execute(f'SELECT * FROM {table_name} WHERE login=? AND password=?', (user, passwd))
         result = self.cursor.fetchone()
